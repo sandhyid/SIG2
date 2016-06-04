@@ -784,11 +784,12 @@ function showPosition(position){
                 type: 'post'
             }).done(function (xHasil)
             {
-            if (xHasil.errno != 0) {
+                alert(xHasil);
+            if (xHasil != 0) {
 
                     swal({
                         title: "Kesalahan",
-                        text: xHasil.pesan,
+                        text: "Gagal Simpan Data",
                         type: "warning",
 //                        showCancelButton: true,
                         confirmButtonColor: "#DD6B55",
@@ -796,10 +797,9 @@ function showPosition(position){
                         closeOnConfirm: true
                     }, function ()
                     {
-                        $('#nama').val('');
                     });
                 } else {
-                    swal(xHasil.pesan, "Pesan Anda telah terkirim.", "success");
+                    swal("Berhasil", "Data Anda Telah Tersimpan.", "success");
                         $('#nama').val('');
                         $('#kategori').val('');
                         $('#jenis').val('');
