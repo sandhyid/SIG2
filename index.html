@@ -49,6 +49,58 @@
   <!-- CSS and JS for our code -->
   <script src="js/if_gmap.js"></script>
   <script type="text/javascript">
+$(document).ready(function(){
+  $("#multiform").submit(function(e) {
+    var formObj = $(this);
+   
+    if(window.FormData !== undefined) {
+      var formData = new FormData(this);
+      $.ajax({
+        url: 'http://apidprd.sandhy.id/upload.php',
+        type: 'POST',
+        data:  formData,
+        mimeType:"multipart/form-data",
+        contentType: false,
+        cache: false,
+        processData:false,
+        success: function(data, textStatus, jqXHR) {
+          swal("Berhasil", "Data Anda Telah Tersimpan.", "success");
+                    $('#nama').val('');
+          $('#kategori').val('');
+          $('#jenis').val('');
+          $('#longval').val('');
+          $('#latval').val('');
+          $('#message').val('');
+          $('#namafile').val('');
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          swal("Berhasil", "Data Anda Telah Tersimpan.", "success");
+          $('#nama').val('');
+          $('#kategori').val('');
+          $('#jenis').val('');
+          $('#longval').val('');
+          $('#latval').val('');
+          $('#message').val('');
+          $('#namafile').val('');
+        }          
+      });
+
+      $('#file').val('')
+      e.preventDefault();
+      //e.unbind();
+    }
+  });
+
+  $("#btnSimpan").click(function() {
+    //sending form from here
+    $("#multiform").submit();
+    console.log();
+  });
+
+});
+
+</script>
+  <script type="text/javascript">
 $(document).on('click', '#current', function ()
         {
             myIP();
@@ -496,10 +548,10 @@ function showPosition(position){
                   <div class="card-panel">
                     <h4 class="header2">Tambah Lokasi</h4>
                     <div class="row">
-                      <form class="col s12">
+                      <form class="col s12" name="multiform" id="multiform" action="#" method="POST" enctype="multipart/form-data">
                         <div class="row">
                           <div class="input-field col s12">
-                            <input id="nama" type="text">
+                            <input id="nama" name="nama" type="text">
                             <label for="first_name">Nama Tempat</label>
                           </div>
                         </div>
@@ -548,13 +600,24 @@ function showPosition(position){
                         <div class="row">
                           <div id="maparea"></div><div id="mapitems" style="width: 100%; height: 245px"></div>
                             <div class="input-field col s12">
-                              <input size=10 type=text value="120.994260" id="longval">
+                              <input size=10 type=text value="120.994260" id="longval" name="longval">
                               <label for="message">Longitude</label>
                             </div>
                             <div class="input-field col s12">
-                              <input size=10 type=text value="14.593999" id="latval">
+                              <input size=10 type=text value="14.593999" id="latval" name="latval">
                               <label for="message">Longitude</label>
                             </div>
+                        </div>
+                        <div class="row">
+                          <div class="file-field input-field">
+                            <div class="btn">
+                              <span>File</span>
+                              <input type="file" id="file" name="file">
+                            </div>
+                          <div class="file-path-wrapper">
+                            <input class="file-path validate" id="namafile" type="text">
+                          </div>
+                         </div>
                         </div>
                         <div class="row">
                           <div class="input-field col s12">
@@ -763,59 +826,61 @@ function showPosition(position){
     <script type="text/javascript" src="js/custom-script.js"></script>
     <script src="js/sweetalert/sweetalert.min.js"></script>
     <!-- Script Halaman -->
-    <script type="text/javascript">
-    $(document).ready(function(){
+     <script type="text/javascript">
+//     $(document).ready(function(){
       
-      $(document).on('click', '#btnSimpan', function ()
-    {
-        var nama = $('#nama').val();
-        var kategori = $('#kategori').val();
-        var jenis = $('#jenis').val();
-        var longval = $('#longval').val();
-        var latval = $('#latval').val();
-        var deskripsi = $('#message').val();
-        simpanPeta(nama,kategori,jenis,longval,latval,deskripsi);
-    })
-        function simpanPeta(nama,kategori,jenis,longval,latval,deskripsi)
-        {
-            $.ajax({
-                url: 'http://apidprd.sandhy.id/tambah_peta.php',
-                data: {nama:nama , kategori : kategori , jenis : jenis , longval : longval , latval : latval , deskripsi : deskripsi},
-                type: 'post'
-            }).done(function (xHasil)
-            {
-            if (xHasil != 0) {
+//       $(document).on('click', '#btnSimpan', function ()
+//     {
+//         var nama = $('#nama').val();
+//         var kategori = $('#kategori').val();
+//         var jenis = $('#jenis').val();
+//         var longval = $('#longval').val();
+//         var latval = $('#latval').val();
+//         var deskripsi = $('#message').val();
+//         simpanPeta(nama,kategori,jenis,longval,latval,deskripsi);
+//     })
+//         function simpanPeta(nama,kategori,jenis,longval,latval,deskripsi)
+//         {
+//             $.ajax({
+//                 url: 'http://apidprd.sandhy.id/tambah_peta.php',
+//                 data: {nama:nama , kategori : kategori , jenis : jenis , longval : longval , latval : latval , deskripsi : deskripsi},
+//                 type: 'post'
+//             }).done(function (xHasil)
+//             {
+//                 alert(xHasil);
+//             if (xHasil != 0) {
 
-                    swal({
-                        title: "Kesalahan",
-                        text: "Gagal Simpan Data",
-                        type: "warning",
-//                        showCancelButton: true,
-                        confirmButtonColor: "#DD6B55",
-                        confirmButtonText: "Ok",
-                        closeOnConfirm: true
-                    }, function ()
-                    {
-                    });
-                } else {
-                    swal("Berhasil", "Data Anda Telah Tersimpan.", "success");
-                        $('#nama').val('');
-                        $('#kategori').val('');
-                        $('#jenis').val('');
-                        $('#longval').val('');
-                        $('#latval').val('');
-                        $('#message').val('');
-                }
-            }).always(function ()
-            {
-            })
-        }
-    });
-    // $(document).on('change', '#kategori', function () {
-    //       var kategori = "#" + $('#kategori').val();
-    //       $(kategori).show();
-    // });
-    </script>
+//                     swal({
+//                         title: "Kesalahan",
+//                         text: "Gagal Simpan Data",
+//                         type: "warning",
+// //                        showCancelButton: true,
+//                         confirmButtonColor: "#DD6B55",
+//                         confirmButtonText: "Ok",
+//                         closeOnConfirm: true
+//                     }, function ()
+//                     {
+//                         $('#nama').val('');
+//                     });
+//                 } else {
+//                     swal("Berhasil", "Data Anda Telah Tersimpan.", "success");
+//                         $('#nama').val('');
+//                         $('#kategori').val('');
+//                         $('#jenis').val('');
+//                         $('#longval').val('');
+//                         $('#latval').val('');
+//                         $('#message').val('');
+//                 }
+//             }).always(function ()
+//             {
+//             })
+//         }
+//     });
+//     // $(document).on('change', '#kategori', function () {
+//     //       var kategori = "#" + $('#kategori').val();
+//     //       $(kategori).show();
+//     // });
+     </script>
 </body>
 
 
